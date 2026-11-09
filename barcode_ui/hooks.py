@@ -5,6 +5,8 @@ app_description = "hi"
 app_email = "hi@gmail.com"
 app_license = "mit"
 
+#app_include_js = "/assets/barcode_ui/js/desk_barcode.js"
+#app_include_js = "/assets/barcode_ui/js/toolbar_barcode.js"
 # Apps
 # ------------------
 
@@ -25,13 +27,65 @@ app_license = "mit"
 # ------------------
 
 # include js, css files in header of desk.html
-# app_include_css = "/assets/barcode_ui/css/barcode_ui.css"
-# app_include_js = "/assets/barcode_ui/js/barcode_ui.js"
-
+app_include_css =["/assets/barcode_ui/css/test7.css"]
+app_include_js = ["/assets/barcode_ui/js/bell_change.js", "/assets/barcode_ui/js/final_qrcode_scan.js"]
+doctype_js = {
+    "Sales Invoice":["public/js/sales_invoice_whatsapp.js", "public/js/sales_invoice_barcode.js"], 
+    "Stock Entry": "public/js/stock_entry.js",
+    "Supplier": "public/js/supplier.js",
+    "Customer": "public/js/customer.js",
+    "Purchase Receipt": "public/js/purchase_receipt.js",
+    "Pricing Rule": "public/js/pricing_rule_filter.js",
+    "Journal Entry": "public/js/journal_entry.js"
+}
+#"Stock Entry": "public/js/stock_scan7.js"
+"""whitelisted_methods = {
+    "barcode_ui.api.stock_entry_api.fetch_pr_items_for_transfer": "barcode_ui.api.stock_entry_api.fetch_pr_items_for_transfer"
+}"""
 # include js, css files in header of web template
 # web_include_css = "/assets/barcode_ui/css/barcode_ui.css"
 # web_include_js = "/assets/barcode_ui/js/barcode_ui.js"
+doc_events = {
+    "Subcontracting Order": {
+        "before_validate": "barcode_ui.fixes.subcontracting_fix.fix_service_item_rates"},
+    "Journal Entry": {
+        "on_submit": "barcode_ui.payroll.payroll_security.update_gl_confidential_flag",
+        "on_cancel": "barcode_ui.payroll.payroll_security.update_gl_confidential_flag",
+        "on_update_after_submit": "barcode_ui.payroll.payroll_security.update_gl_confidential_flag",
+    },
+    "Work Order": {
+        "before_save": [
+            "barcode_ui.work_order.events.reset_priority_if_completed_or_cancelled"
+        ],
+        "on_change": [
+            "barcode_ui.work_order.events.reset_priority_if_completed_or_cancelled"
+        ],
+        "on_cancel": [
+            "barcode_ui.work_order.events.reset_priority_if_completed_or_cancelled"
+        ],
+    },
+    
+}
+fixtures = [
+    {
+        "dt": "Custom Field",
+        "filters": [["dt", "=", "Pricing Rule"], ["fieldname", "like", "custom_filter%"]]
+    }
+]
 
+api_methods = [
+    "barcode_ui.api.pricing_rule_filter.get_filtered_items"
+]
+
+permission_query_conditions = {
+    "Journal Entry":
+        "barcode_ui.je_permissions.journal_entry.permission_query_conditions"
+}
+
+has_permission = {
+    "Journal Entry":
+        "barcode_ui.je_permissions.journal_entry.has_permission"
+}
 # include custom scss in every website theme (without file extension ".scss")
 # website_theme_scss = "barcode_ui/public/scss/website"
 
@@ -81,7 +135,13 @@ app_license = "mit"
 
 # Installation
 # ------------
+#permission_query_conditions = {
+ #       "Over Time": "barcode_ui.barcode_ui.doctype.over_time.over_time.get_permission_query_conditions"
+#}
 
+#has_permission = {
+ #       "Over Time": "barcode_ui.barcode_ui.doctype.over_time.over_time.has_permission"
+#}
 # before_install = "barcode_ui.install.before_install"
 # after_install = "barcode_ui.install.after_install"
 
@@ -165,7 +225,13 @@ app_license = "mit"
 # 		"barcode_ui.tasks.monthly"
 # 	],
 # }
-
+scheduler_events = {
+    "cron": {
+        "0 8 26 * *": [
+            "barcode_ui.barcode_ui.doctype.employee_attendance_summary.employee_attendance_summary.generate_monthly_summary_automatically"
+        ],
+    }
+}
 # Testing
 # -------
 

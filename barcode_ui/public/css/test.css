@@ -1,0 +1,389 @@
+/* ============================================
+   ERPNext Glass-Morphism Theme
+   ============================================ */
+
+/* CSS Variables for easy theming */
+:root {
+  --glass-bg: rgba(255, 255, 255, 0.1);
+  --glass-bg-dark: rgba(15, 23, 42, 0.6);
+  --glass-border: rgba(255, 255, 255, 0.2);
+  --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  --glow-primary: 0 0 20px rgba(59, 130, 246, 0.5);
+  --glow-success: 0 0 20px rgba(34, 197, 94, 0.5);
+  --glow-danger: 0 0 20px rgba(239, 68, 68, 0.5);
+  --glow-warning: 0 0 20px rgba(245, 158, 11, 0.5);
+  --accent-primary: #3b82f6;
+  --accent-success: #22c55e;
+  --accent-danger: #ef4444;
+  --accent-warning: #f59e0b;
+}
+
+/* Dark mode base */
+body {
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
+  background-attachment: fixed;
+}
+
+/* ============================================
+   GLASSY BUTTONS WITH GLOW EFFECTS
+   ============================================ */
+
+.btn {
+  background: var(--glass-bg) !important;
+  backdrop-filter: blur(10px) !important;
+  -webkit-backdrop-filter: blur(10px) !important;
+  border: 1px solid var(--glass-border) !important;
+  border-radius: 12px !important;
+  box-shadow: var(--glass-shadow) !important;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  position: relative !important;
+  overflow: hidden !important;
+}
+
+.btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.2),
+    transparent
+  );
+  transition: left 0.5s;
+}
+
+.btn:hover::before {
+  left: 100%;
+}
+
+.btn:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: var(--glass-shadow), var(--glow-primary) !important;
+  border-color: rgba(59, 130, 246, 0.5) !important;
+}
+
+/* Primary Button - Blue Glow */
+.btn-primary {
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(37, 99, 235, 0.3)) !important;
+  border-color: rgba(59, 130, 246, 0.4) !important;
+}
+
+.btn-primary:hover {
+  box-shadow: var(--glass-shadow), 0 0 30px rgba(59, 130, 246, 0.6) !important;
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.3), rgba(37, 99, 235, 0.4)) !important;
+}
+
+/* Success Button - Green Glow */
+.btn-success {
+  background: linear-gradient(135deg, rgba(34, 197, 94, 0.2), rgba(22, 163, 74, 0.3)) !important;
+  border-color: rgba(34, 197, 94, 0.4) !important;
+}
+
+.btn-success:hover {
+  box-shadow: var(--glass-shadow), 0 0 30px rgba(34, 197, 94, 0.6) !important;
+}
+
+/* Danger Button - Red Glow */
+.btn-danger {
+  background: linear-gradient(135deg, rgba(239, 68, 68, 0.2), rgba(220, 38, 38, 0.3)) !important;
+  border-color: rgba(239, 68, 68, 0.4) !important;
+}
+
+.btn-danger:hover {
+  box-shadow: var(--glass-shadow), 0 0 30px rgba(239, 68, 68, 0.6) !important;
+}
+
+/* Warning Button - Orange Glow */
+.btn-warning {
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.2), rgba(217, 119, 6, 0.3)) !important;
+  border-color: rgba(245, 158, 11, 0.4) !important;
+}
+
+.btn-warning:hover {
+  box-shadow: var(--glass-shadow), 0 0 30px rgba(245, 158, 11, 0.6) !important;
+}
+
+/* Secondary/Default Button */
+.btn-default {
+  background: rgba(255, 255, 255, 0.05) !important;
+}
+
+.btn-default:hover {
+  box-shadow: var(--glass-shadow), 0 0 20px rgba(255, 255, 255, 0.2) !important;
+}
+
+/* ============================================
+   GLASSY FORM ELEMENTS
+   ============================================ */
+
+.form-control {
+  background: var(--glass-bg) !important;
+  backdrop-filter: blur(10px) !important;
+  -webkit-backdrop-filter: blur(10px) !important;
+  border: 1px solid var(--glass-border) !important;
+  border-radius: 10px !important;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+  color: #e2e8f0 !important;
+  transition: all 0.3s ease !important;
+}
+
+.form-control:focus {
+  border-color: rgba(59, 130, 246, 0.6) !important;
+  box-shadow: 
+    inset 0 2px 4px rgba(0, 0, 0, 0.1),
+    0 0 20px rgba(59, 130, 246, 0.3) !important;
+  outline: none !important;
+  background: rgba(255, 255, 255, 0.15) !important;
+}
+
+.form-control::placeholder {
+  color: rgba(148, 163, 184, 0.6) !important;
+}
+
+/* Select dropdowns */
+select.form-control {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%2394a3b8' d='M6 8L1 3h10z'/%3E%3C/svg%3E") !important;
+  background-repeat: no-repeat !important;
+  background-position: right 12px center !important;
+  padding-right: 35px !important;
+}
+
+/* ============================================
+   GLASSY FORM SECTIONS & CARDS
+   ============================================ */
+
+.form-section, .form-dashboard-section, 
+.section-head, .frappe-card {
+  background: var(--glass-bg-dark) !important;
+  backdrop-filter: blur(20px) !important;
+  -webkit-backdrop-filter: blur(20px) !important;
+  border: 1px solid var(--glass-border) !important;
+  border-radius: 16px !important;
+  box-shadow: 
+    0 8px 32px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1) !important;
+  margin-bottom: 20px !important;
+  overflow: hidden !important;
+}
+
+.section-head {
+  border-bottom: 1px solid var(--glass-border) !important;
+  background: linear-gradient(90deg, rgba(59, 130, 246, 0.1), transparent) !important;
+  padding: 16px 20px !important;
+  font-weight: 600 !important;
+  color: #f8fafc !important;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3) !important;
+}
+
+.form-section .section-body {
+  padding: 20px !important;
+}
+
+/* ============================================
+   GLASSY SIDEBAR & NAVIGATION
+   ============================================ */
+
+.layout-side-section, .sidebar-menu {
+  background: var(--glass-bg-dark) !important;
+  backdrop-filter: blur(20px) !important;
+  border-right: 1px solid var(--glass-border) !important;
+}
+
+.sidebar-menu .sidebar-item {
+  background: transparent !important;
+  border-radius: 10px !important;
+  margin: 4px 8px !important;
+  transition: all 0.3s ease !important;
+  border: 1px solid transparent !important;
+}
+
+.sidebar-menu .sidebar-item:hover {
+  background: rgba(59, 130, 246, 0.15) !important;
+  border-color: rgba(59, 130, 246, 0.3) !important;
+  box-shadow: 0 0 15px rgba(59, 130, 246, 0.2) !important;
+}
+
+.sidebar-menu .sidebar-item.active {
+  background: linear-gradient(90deg, rgba(59, 130, 246, 0.3), rgba(59, 130, 246, 0.1)) !important;
+  border-color: rgba(59, 130, 246, 0.5) !important;
+  box-shadow: 0 0 20px rgba(59, 130, 246, 0.3) !important;
+}
+
+/* ============================================
+   GLASSY MODALS & DIALOGS
+   ============================================ */
+
+.modal-content {
+  background: var(--glass-bg-dark) !important;
+  backdrop-filter: blur(20px) !important;
+  -webkit-backdrop-filter: blur(20px) !important;
+  border: 1px solid var(--glass-border) !important;
+  border-radius: 20px !important;
+  box-shadow: 
+    0 25px 50px -12px rgba(0, 0, 0, 0.5),
+    0 0 0 1px rgba(255, 255, 255, 0.1) !important;
+}
+
+.modal-header {
+  background: linear-gradient(90deg, rgba(59, 130, 246, 0.2), transparent) !important;
+  border-bottom: 1px solid var(--glass-border) !important;
+  border-radius: 20px 20px 0 0 !important;
+}
+
+/* ============================================
+   GLASSY DATA TABLES
+   ============================================ */
+
+.form-grid {
+  background: var(--glass-bg-dark) !important;
+  backdrop-filter: blur(10px) !important;
+  border: 1px solid var(--glass-border) !important;
+  border-radius: 12px !important;
+  overflow: hidden !important;
+}
+
+.grid-heading-row {
+  background: rgba(15, 23, 42, 0.8) !important;
+  border-bottom: 1px solid var(--glass-border) !important;
+}
+
+.grid-row {
+  background: transparent !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important;
+  transition: all 0.2s ease !important;
+}
+
+.grid-row:hover {
+  background: rgba(59, 130, 246, 0.1) !important;
+  box-shadow: inset 0 0 20px rgba(59, 130, 246, 0.1) !important;
+}
+
+/* ============================================
+   GLASSY TABS
+   ============================================ */
+
+.nav-tabs {
+  border-bottom: 1px solid var(--glass-border) !important;
+}
+
+.nav-tabs .nav-link {
+  background: transparent !important;
+  border: 1px solid transparent !important;
+  border-radius: 10px 10px 0 0 !important;
+  color: #94a3b8 !important;
+  transition: all 0.3s ease !important;
+}
+
+.nav-tabs .nav-link:hover {
+  background: rgba(59, 130, 246, 0.1) !important;
+  color: #e2e8f0 !important;
+  border-color: rgba(59, 130, 246, 0.3) !important;
+}
+
+.nav-tabs .nav-link.active {
+  background: var(--glass-bg) !important;
+  border-color: var(--glass-border) var(--glass-border) transparent !important;
+  color: #3b82f6 !important;
+  box-shadow: 0 -5px 20px rgba(59, 130, 246, 0.2) !important;
+}
+
+/* ============================================
+   GLASSY DROPDOWNS
+   ============================================ */
+
+.dropdown-menu {
+  background: var(--glass-bg-dark) !important;
+  backdrop-filter: blur(20px) !important;
+  border: 1px solid var(--glass-border) !important;
+  border-radius: 12px !important;
+  box-shadow: 
+    0 10px 40px rgba(0, 0, 0, 0.4),
+    0 0 0 1px rgba(255, 255, 255, 0.1) !important;
+}
+
+.dropdown-item {
+  color: #e2e8f0 !important;
+  border-radius: 8px !important;
+  margin: 2px 6px !important;
+  width: calc(100% - 12px) !important;
+  transition: all 0.2s ease !important;
+}
+
+.dropdown-item:hover {
+  background: rgba(59, 130, 246, 0.2) !important;
+  box-shadow: 0 0 15px rgba(59, 130, 246, 0.2) !important;
+}
+
+/* ============================================
+   GLASSY TOOLBAR & HEADER
+   ============================================ */
+
+.page-head {
+  background: var(--glass-bg-dark) !important;
+  backdrop-filter: blur(20px) !important;
+  border-bottom: 1px solid var(--glass-border) !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2) !important;
+}
+
+.page-title {
+  color: #f8fafc !important;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3) !important;
+}
+
+/* ============================================
+   ANIMATED GLOW EFFECTS
+   ============================================ */
+
+@keyframes pulse-glow {
+  0%, 100% {
+    box-shadow: 0 0 20px rgba(59, 130, 246, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 30px rgba(59, 130, 246, 0.6);
+  }
+}
+
+.btn-primary:active {
+  animation: pulse-glow 0.5s ease-in-out;
+}
+
+/* Floating animation for cards */
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-5px);
+  }
+}
+
+.form-section:hover {
+  animation: float 3s ease-in-out infinite;
+}
+
+/* ============================================
+   SCROLLBAR STYLING
+   ============================================ */
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(15, 23, 42, 0.5) !important;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(59, 130, 246, 0.5) !important;
+  border-radius: 4px !important;
+  box-shadow: 0 0 10px rgba(59, 130, 246, 0.3) !important;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(59, 130, 246, 0.7) !important;
+}

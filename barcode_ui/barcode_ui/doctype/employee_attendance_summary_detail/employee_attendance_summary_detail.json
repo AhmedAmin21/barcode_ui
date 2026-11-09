@@ -1,0 +1,17 @@
+{
+ "doctype": "DocType",
+ "name": "Employee Attendance Summary Detail",
+ "module": "barcode_ui",
+ "istable": 1,
+ "editable_grid": 1,
+ "fields": [
+  { "fieldname": "employee", "fieldtype": "Link", "label": "Employee", "options": "Employee", "in_list_view": 1, "reqd": 1 },
+  { "fieldname": "employee_name", "fieldtype": "Read Only", "label": "Employee Name", "fetch_from": "employee.employee_name", "in_list_view": 1 },
+  { "fieldname": "main_salary", "fieldtype": "Currency", "label": "Main Salary", "read_only": 1, "in_list_view": 1 },
+  { "fieldname": "total_hours", "fieldtype": "Float", "label": "Total Hours", "read_only": 1, "in_list_view": 1 },
+  { "fieldname": "overtime_hours", "fieldtype": "Float", "label": "Overtime", "read_only": 1, "in_list_view": 1 },
+  { "fieldname": "total_salary", "fieldtype": "Currency", "label": "Total Salary", "read_only": 1, "in_list_view": 1 },
+  { "fieldname": "total_advance", "fieldtype": "Currency", "label": "Total Advance", "read_only": 1 },
+  { "fieldname": "net_remaining", "fieldtype": "Currency", "label": "Net Remaining", "read_only": 1, "in_list_view": 1 }
+ ]
+}

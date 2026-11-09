@@ -1,0 +1,17 @@
+{
+ "doctype": "DocType",
+ "name": "Employee Attendance Summary",
+ "module": "barcode_ui",
+ "autoname": "format:EAS-{YYYY}-{MM}-{DD}",
+ "fields": [
+  { "fieldname": "month_year", "fieldtype": "Data", "label": "Month/Year", "read_only": 1 },
+  { "fieldname": "reference_date", "fieldtype": "Date", "label": "Reference Date", "default": "Today", "reqd": 1 },
+  { "fieldname": "get_stats", "fieldtype": "Button", "label": "Fetch Stats" },
+  { "fieldname": "section_break", "fieldtype": "Section Break" },
+  { "fieldname": "employees", "fieldtype": "Table", "label": "Employee List", "options": "Employee Attendance Summary Detail" }
+ ],
+ "permissions": [
+  { "role": "HR Manager", "read": 1, "write": 1, "create": 1, "delete": 1 },
+  { "role": "System Manager", "read": 1, "write": 1, "create": 1, "delete": 1 }
+ ]
+}

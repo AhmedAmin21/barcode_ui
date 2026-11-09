@@ -1,0 +1,22 @@
+{
+ "content": null,
+ "creation": "2026-02-03 16:52:29.040942",
+ "docstatus": 0,
+ "doctype": "Page",
+ "idx": 0,
+ "modified": "2026-02-03 16:58:17.357519",
+ "modified_by": "Administrator",
+ "module": "barcode ui",
+ "name": "employee-stats",
+ "owner": "Administrator",
+ "page_name": "employee-stats",
+ "roles": [
+  {
+   "role": "All"
+  }
+ ],
+ "script": null,
+ "standard": "Yes",
+ "style": null,
+ "system_page": 0
+}

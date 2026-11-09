@@ -1,0 +1,69 @@
+frappe.pages['employee-stats'].on_page_load = function(wrapper) {
+    let page = frappe.ui.make_app_page({
+        parent: wrapper,
+        title: __('My Attendance & Pay Summary'),
+        single_column: true
+    });
+
+    let $container = $(wrapper).find('.layout-main-section');
+    
+    $container.append(`
+        <div id="attendance-dash" style="padding: 20px;">
+            <div style="margin-bottom: 25px;">
+                <h3 id="dash-user" style="margin: 0; color: #171717;">...</h3>
+                <p id="dash-month" style="color: #8d99a6; font-size: 14px;"></p>
+            </div>
+            
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px;">
+                <div class="stat-card" style="background: #fff; border: 1px solid #d1d8dd; border-radius: 10px; padding: 15px; text-align: center;">
+                    <div style="font-size: 10px; font-weight: bold; color: #8d99a6; text-transform: uppercase;"></div>
+                    <div id="val-days" style="font-size: 22px; font-weight: bold; color: #171717;">0</div>
+                </div>
+
+                <div class="stat-card" style="background: #fff; border: 1px solid #d1d8dd; border-radius: 10px; padding: 15px; text-align: center;">
+                    <div style="font-size: 10px; font-weight: bold; color: #8d99a6; text-transform: uppercase;">Working Hours</div>
+                    <div id="val-hours" style="font-size: 22px; font-weight: bold; color: #3498db;">0.00</div>
+                </div>
+
+                <div class="stat-card" style="background: #fff; border: 1px solid #d1d8dd; border-radius: 10px; padding: 15px; text-align: center;">
+                    <div style="font-size: 10px; font-weight: bold; color: #8d99a6; text-transform: uppercase;">Earned So Far</div>
+                    <div id="val-salary" style="font-size: 22px; font-weight: bold; color: #2ecc71;">0.00</div>
+                </div>
+
+                <div class="stat-card" style="background: #fff; border: 1px solid #d1d8dd; border-radius: 10px; padding: 15px; text-align: center;">
+                    <div style="font-size: 10px; font-weight: bold; color: #8d99a6; text-transform: uppercase;">Advances Paid</div>
+                    <div id="val-advance" style="font-size: 22px; font-weight: bold; color: #e74c3c;">0.00</div>
+                </div>
+
+                <div class="stat-card" style="background: #f8f9fa; border: 2px solid #2ecc71; border-radius: 10px; padding: 15px; text-align: center;">
+                    <div style="font-size: 10px; font-weight: bold; color: #27ae60; text-transform: uppercase;">Net Balance</div>
+                    <div id="val-net" style="font-size: 22px; font-weight: bold; color: #27ae60;">0.00</div>
+                </div>
+            </div>
+        </div>
+    `);
+
+    function load_data() {
+        frappe.call({
+            method: 'barcode_ui.barcode_ui.page.employee_stats.employee_stats.get_attendance_summary',
+            callback: function(r) {
+                if (r.message) {
+                    if (r.message.error) {
+                        frappe.msgprint(r.message.error);
+                    } else {
+                        $('#dash-user').text(`Hello, ${r.message.employee_name}`);
+                        $('#dash-month').text(`Status for ${r.message.month}`);
+                        $('#val-days').text(r.message.total_days);
+                        $('#val-hours').text(r.message.total_hours);
+                        $('#val-salary').text(format_currency(r.message.total_salary));
+                        $('#val-advance').text(format_currency(r.message.total_advance));
+                        $('#val-net').text(format_currency(r.message.net_remaining));
+                    }
+                }
+            }
+        });
+    }
+
+    load_data();
+    page.set_primary_action(__('Refresh'), () => load_data(), 'refresh');
+};

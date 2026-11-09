@@ -1,0 +1,26 @@
+{
+ "content": null,
+ "creation": "2026-05-16 15:08:40.783605",
+ "docstatus": 0,
+ "doctype": "Page",
+ "idx": 0,
+ "modified": "2026-05-16 15:09:59.491413",
+ "modified_by": "Administrator",
+ "module": "barcode ui",
+ "name": "stock-usa-dashboard",
+ "owner": "Administrator",
+ "page_name": "stock-usa-dashboard",
+ "roles": [
+  {
+   "role": "System Manager"
+  },
+  {
+   "role": "Administrator"
+  }
+ ],
+ "script": null,
+ "standard": "Yes",
+ "style": null,
+ "system_page": 0,
+ "title": "Stock USA Dashboard"
+}

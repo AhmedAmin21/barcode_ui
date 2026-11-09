@@ -1,0 +1,529 @@
+{% extends "templates/web.html" %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block head %}
+{{ super() }}
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com"></script>
+
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<!-- DataTables -->
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.2/css/buttons.dataTables.min.css">
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.4.2/js/dataTables.buttons.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.html5.min.js"></script>
+
+<!-- Font Awesome -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+<script>
+    tailwind.config = {
+        theme: {
+            extend: {
+                colors: {
+                    'cnc-blue': '#0066CC',
+                    'cnc-dark': '#0a0e1a',
+                    'cnc-card': '#111827',
+                    'cnc-border': '#1e3a5f',
+                    'cnc-accent': '#00d4ff',
+                    'cnc-gold': '#FFD700',
+                    'cnc-success': '#10b981',
+                    'cnc-danger': '#ef4444',
+                    'cnc-warning': '#f59e0b'
+                },
+                fontFamily: {
+                    'sans': ['Inter', 'sans-serif']
+                }
+            }
+        }
+    }
+</script>
+
+<style>
+    body {
+        background: linear-gradient(135deg, #0a0e1a 0%, #1a1f2e 100%);
+        font-family: 'Inter', sans-serif;
+        color: #e5e7eb;
+    }
+
+    .glass-card {
+        background: rgba(17, 24, 39, 0.8);
+        backdrop-filter: blur(12px);
+        border: 1px solid rgba(30, 58, 95, 0.6);
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    }
+
+    .ticker-card {
+        background: linear-gradient(135deg, rgba(0, 102, 204, 0.15) 0%, rgba(17, 24, 39, 0.9) 100%);
+        border-left: 4px solid #0066CC;
+        transition: all 0.3s ease;
+    }
+
+    .ticker-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 12px 40px rgba(0, 102, 204, 0.2);
+    }
+
+    .ticker-card.gold {
+        border-left-color: #FFD700;
+        background: linear-gradient(135deg, rgba(255, 215, 0, 0.1) 0%, rgba(17, 24, 39, 0.9) 100%);
+    }
+
+    .ticker-card.gold:hover {
+        box-shadow: 0 12px 40px rgba(255, 215, 0, 0.2);
+    }
+
+    .metric-value {
+        background: linear-gradient(90deg, #ffffff 0%, #00d4ff 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+    .metric-value.gold-text {
+        background: linear-gradient(90deg, #FFD700 0%, #FFA500 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+    .dataTables_wrapper {
+        background: rgba(17, 24, 39, 0.6);
+        border-radius: 12px;
+        padding: 20px;
+    }
+
+    table.dataTable {
+        background: transparent !important;
+        color: #e5e7eb !important;
+    }
+
+    table.dataTable thead th {
+        background: rgba(0, 102, 204, 0.2) !important;
+        color: #00d4ff !important;
+        border-bottom: 2px solid #0066CC !important;
+        font-weight: 600;
+        text-transform: uppercase;
+        font-size: 0.75rem;
+        letter-spacing: 0.05em;
+    }
+
+    table.dataTable tbody td {
+        border-bottom: 1px solid rgba(30, 58, 95, 0.4) !important;
+        padding: 12px 10px !important;
+    }
+
+    table.dataTable tbody tr:hover {
+        background: rgba(0, 102, 204, 0.1) !important;
+    }
+
+    .dt-buttons button {
+        background: #0066CC !important;
+        color: white !important;
+        border: none !important;
+        border-radius: 6px !important;
+        padding: 8px 16px !important;
+        font-size: 0.875rem !important;
+        margin-right: 8px !important;
+        transition: all 0.2s !important;
+    }
+
+    .dt-buttons button:hover {
+        background: #0052a3 !important;
+        transform: translateY(-1px);
+    }
+
+    .pulse-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: #10b981;
+        animation: pulse 2s infinite;
+        display: inline-block;
+        margin-right: 8px;
+    }
+
+    @keyframes pulse {
+        0%, 100% { opacity: 1; transform: scale(1); }
+        50% { opacity: 0.5; transform: scale(1.2); }
+    }
+
+    .alert-banner {
+        background: linear-gradient(90deg, rgba(239, 68, 68, 0.2) 0%, rgba(245, 158, 11, 0.2) 100%);
+        border: 1px solid rgba(239, 68, 68, 0.4);
+        border-radius: 8px;
+    }
+
+    .chart-container {
+        position: relative;
+        height: 300px;
+        width: 100%;
+    }
+
+    .filter-panel {
+        background: rgba(17, 24, 39, 0.9);
+        border: 1px solid rgba(30, 58, 95, 0.6);
+        border-radius: 12px;
+    }
+    input, select {
+        background: rgba(31, 41, 55, 0.8) !important;
+        border: 1px solid rgba(30, 58, 95, 0.6) !important;
+        color: #e5e7eb !important;
+        border-radius: 8px !important;
+    }
+
+    input:focus, select:focus {
+        border-color: #0066CC !important;
+        outline: none !important;
+        box-shadow: 0 0 0 3px rgba(0, 102, 204, 0.2) !important;
+    }
+
+    .btn-primary {
+        background: linear-gradient(135deg, #0066CC 0%, #0052a3 100%);
+        color: white;
+        border: none;
+        border-radius: 8px;
+        padding: 10px 24px;
+        font-weight: 600;
+        transition: all 0.3s;
+        cursor: pointer;
+    }
+
+    .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(0, 102, 204, 0.4);
+    }
+
+    .status-badge {
+        padding: 4px 12px;
+        border-radius: 20px;
+        font-size: 0.75rem;
+        font-weight: 600;
+    }
+
+    .status-badge.success { background: rgba(16, 185, 129, 0.2); color: #10b981; }
+    .status-badge.warning { background: rgba(245, 158, 11, 0.2); color: #f59e0b; }
+    .status-badge.danger { background: rgba(239, 68, 68, 0.2); color: #ef4444; }
+    .status-badge.info { background: rgba(0, 102, 204, 0.2); color: #0066CC; }
+
+    .total-row {
+        background: rgba(0, 102, 204, 0.15) !important;
+        font-weight: 700;
+        border-top: 2px solid #0066CC !important;
+    }
+
+    ::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+        background: #0a0e1a;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background: #1e3a5f;
+        border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+        background: #0066CC;
+    }
+
+    .erpnext-nav {
+        display: none;
+    }
+
+    .loading-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(10, 14, 26, 0.95);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 9999;
+        flex-direction: column;
+    }
+
+    .loading-spinner {
+        width: 60px;
+        height: 60px;
+        border: 4px solid rgba(0, 102, 204, 0.2);
+        border-top-color: #0066CC;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+        to { transform: rotate(360deg); }
+    }
+</style>
+{% endblock %}
+
+{% block page_content %}
+<!-- Loading Overlay -->
+<div id="loadingOverlay" class="loading-overlay">
+    <div class="loading-spinner mb-4"></div>
+    <p class="text-cnc-accent text-lg font-semibold">Loading Dashboard...</p>
+    <p class="text-gray-500 text-sm mt-2">Fetching live rates and stock data</p>
+</div>
+
+<!-- Header -->
+<header class="glass-card sticky top-0 z-50 px-6 py-4 mb-6">
+    <div class="max-w-[1600px] mx-auto flex items-center justify-between">
+        <div class="flex items-center gap-4">
+            <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-cnc-blue to-cnc-accent flex items-center justify-center">
+                <i class="fas fa-chart-line text-white text-xl"></i>
+            </div>
+            <div>
+                <h1 class="text-2xl font-bold text-white tracking-tight">Stock USA</h1>
+                <p class="text-sm text-gray-400">Decision Dashboard & Portfolio Analytics</p>
+            </div>
+        </div>
+
+        <div class="flex items-center gap-4">
+            <div class="flex items-center text-sm text-gray-400">
+                <span class="pulse-dot"></span>
+                <span id="lastUpdated">Initializing...</span>
+            </div>
+            <button onclick="refreshAll()" class="btn-primary flex items-center gap-2">
+                <i class="fas fa-sync-alt" id="refreshIcon"></i>
+                Refresh
+            </button>
+            <button onclick="toggleFilters()" class="px-4 py-2 rounded-lg border border-cnc-border text-gray-300 hover:bg-cnc-blue/20 transition">
+                <i class="fas fa-filter mr-2"></i>Filters
+            </button>
+        </div>
+    </div>
+</header>
+
+<main class="max-w-[1600px] mx-auto px-6 pb-12">
+    <!-- Filter Panel -->
+    <div id="filterPanel" class="filter-panel p-6 mb-6 hidden">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <div>
+                <label class="block text-sm font-medium text-gray-400 mb-2">Company</label>
+                <select id="filterCompany" class="w-full px-4 py-2 rounded-lg">
+                    <option value="">All Companies</option>
+                </select>
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-400 mb-2">Item Group</label>
+                <select id="filterItemGroup" class="w-full px-4 py-2 rounded-lg">
+                    <option value="">All Groups</option>
+                </select>
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-400 mb-2">Currency</label>
+                <select id="filterCurrency" class="w-full px-4 py-2 rounded-lg">
+                    <option value="">All Currencies</option>
+                    <option value="EGP">EGP</option>
+                    <option value="USD">USD</option>
+                </select>
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-400 mb-2">Date Range</label>
+                <div class="flex gap-2">
+                    <input type="date" id="filterFromDate" class="w-full px-4 py-2 rounded-lg">
+                    <input type="date" id="filterToDate" class="w-full px-4 py-2 rounded-lg">
+                </div>
+            </div>
+        </div>
+        <div class="mt-4 flex justify-end gap-3">
+            <button onclick="applyFilters()" class="btn-primary">
+                <i class="fas fa-search mr-2"></i>Apply Filters
+            </button>
+            <button onclick="resetFilters()" class="px-4 py-2 rounded-lg border border-cnc-border text-gray-400 hover:text-white transition">
+                Reset
+            </button>
+        </div>
+    </div>
+
+    <!-- Alert Banner -->
+    <div id="alertBanner" class="alert-banner p-4 mb-6 hidden">
+        <div class="flex items-center gap-3">
+            <i class="fas fa-exclamation-triangle text-cnc-warning text-xl"></i>
+            <div>
+                <p class="font-semibold text-white" id="alertTitle">Market Alert</p>
+                <p class="text-sm text-gray-300" id="alertMessage">Significant rate change detected</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Live Ticker Cards -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+        <div class="ticker-card gold rounded-xl p-5">
+            <div class="flex justify-between items-start mb-3">
+                <div class="flex items-center gap-2">
+                    <i class="fas fa-coins text-cnc-gold text-lg"></i>
+                    <span class="text-sm font-medium text-gray-300">Gold 24K / Gram</span>
+                </div>
+                <span class="status-badge success">LIVE</span>
+            </div>
+            <div class="flex items-baseline gap-2">
+                <span class="text-3xl font-bold metric-value gold-text" id="goldPrice">$ --.--</span>
+                <span class="text-sm" id="goldChange">
+                    <i class="fas fa-minus text-gray-500"></i>
+                </span>
+            </div>
+            <div class="mt-3 h-10">
+                <canvas id="goldSparkline"></canvas>
+            </div>
+            <p class="text-xs text-gray-500 mt-2">Source: GoldAPI.io</p>
+        </div>
+
+        <div class="ticker-card rounded-xl p-5">
+            <div class="flex justify-between items-start mb-3">
+                <div class="flex items-center gap-2">
+                    <i class="fas fa-exchange-alt text-cnc-accent text-lg"></i>
+                    <span class="text-sm font-medium text-gray-300">USD / EGP</span>
+                </div>
+                <span class="status-badge success">LIVE</span>
+            </div>
+            <div class="flex items-baseline gap-2">
+                <span class="text-3xl font-bold metric-value" id="rateEGP">--.--</span>
+                <span class="text-sm" id="egpChange">
+                    <i class="fas fa-minus text-gray-500"></i>
+                </span>
+            </div>
+            <div class="mt-3 h-10">
+                <canvas id="egpSparkline"></canvas>
+            </div>
+            <p class="text-xs text-gray-500 mt-2">Source: Frankfurter API</p>
+        </div>
+
+        <div class="ticker-card rounded-xl p-5">
+            <div class="flex justify-between items-start mb-3">
+                <div class="flex items-center gap-2">
+                    <i class="fas fa-yen-sign text-cnc-accent text-lg"></i>
+                    <span class="text-sm font-medium text-gray-300">USD / CNY</span>
+                </div>
+                <span class="status-badge success">LIVE</span>
+            </div>
+            <div class="flex items-baseline gap-2">
+                <span class="text-3xl font-bold metric-value" id="rateCNY">--.--</span>
+                <span class="text-sm" id="cnyChange">
+                    <i class="fas fa-minus text-gray-500"></i>
+                </span>
+            </div>
+            <div class="mt-3 h-10">
+                <canvas id="cnySparkline"></canvas>
+            </div>
+            <p class="text-xs text-gray-500 mt-2">Source: Frankfurter API</p>
+        </div>
+
+        <div class="ticker-card rounded-xl p-5">
+            <div class="flex justify-between items-start mb-3">
+                <div class="flex items-center gap-2">
+                    <i class="fas fa-euro-sign text-cnc-accent text-lg"></i>
+                    <span class="text-sm font-medium text-gray-300">USD / EUR</span>
+                </div>
+                <span class="status-badge success">LIVE</span>
+            </div>
+            <div class="flex items-baseline gap-2">
+                <span class="text-3xl font-bold metric-value" id="rateEUR">--.--</span>
+                <span class="text-sm" id="eurChange">
+                    <i class="fas fa-minus text-gray-500"></i>
+                </span>
+            </div>
+            <div class="mt-3 h-10">
+                <canvas id="eurSparkline"></canvas>
+            </div>
+            <p class="text-xs text-gray-500 mt-2">Source: Frankfurter API</p>
+        </div>
+    </div>
+
+    <!-- KPI Summary Cards -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+        <div class="glass-card rounded-xl p-5">
+            <div class="flex items-center justify-between mb-3">
+                <span class="text-sm font-medium text-gray-400">Total Stock Value (USD)</span>
+                <div class="w-10 h-10 rounded-lg bg-cnc-blue/20 flex items-center justify-center">
+                    <i class="fas fa-dollar-sign text-cnc-blue"></i>
+                </div>
+            </div>
+            <p class="text-2xl font-bold text-white" id="kpiTotalUSD">$ --</p>
+            <p class="text-xs text-gray-500 mt-1">Current valuation</p>
+        </div>
+
+        <div class="glass-card rounded-xl p-5">
+            <div class="flex items-center justify-between mb-3">
+                <span class="text-sm font-medium text-gray-400">Total Stock Value (EGP)</span>
+                <div class="w-10 h-10 rounded-lg bg-cnc-success/20 flex items-center justify-center">
+                    <i class="fas fa-pound-sign text-cnc-success"></i>
+                </div>
+            </div>
+            <p class="text-2xl font-bold text-white" id="kpiTotalEGP">EGP --</p>
+            <p class="text-xs text-gray-500 mt-1">At today's rate</p>
+        </div>
+
+        <div class="glass-card rounded-xl p-5">
+            <div class="flex items-center justify-between mb-3">
+                <span class="text-sm font-medium text-gray-400">Gold Equivalent</span>
+                <div class="w-10 h-10 rounded-lg bg-cnc-gold/20 flex items-center justify-center">
+                    <i class="fas fa-coins text-cnc-gold"></i>
+                </div>
+            </div>
+            <p class="text-2xl font-bold text-cnc-gold" id="kpiGoldGrams">-- g</p>
+            <p class="text-xs text-gray-500 mt-1" id="kpiGoldUSD">$ --</p>
+        </div>
+
+        <div class="glass-card rounded-xl p-5">
+            <div class="flex items-center justify-between mb-3">
+                <span class="text-sm font-medium text-gray-400">Currency Exposure</span>
+                <div class="w-10 h-10 rounded-lg bg-cnc-warning/20 flex items-center justify-center">
+                    <i class="fas fa-globe text-cnc-warning"></i>
+                </div>
+            </div>
+            <p class="text-2xl font-bold text-white" id="kpiExposure">--</p>
+            <p class="text-xs text-gray-500 mt-1">Primary currency</p>
+        </div>
+    </div>
+
+    <!-- Charts Row -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+        <div class="glass-card rounded-xl p-5">
+            <h3 class="text-lg font-semibold text-white mb-4 flex items-center gap-2">
+                <i class="fas fa-chart-pie text-cnc-accent"></i>
+                Portfolio by Currency
+            </h3>
+            <div class="chart-container">
+                <canvas id="currencyChart"></canvas>
+            </div>
+        </div>
+
+        <div class="glass-card rounded-xl p-5">
+            <h3 class="text-lg font-semibold text-white mb-4 flex items-center gap-2">
+                <i class="fas fa-chart-bar text-cnc-accent"></i>
+                Value by Item Group
+            </h3>
+            <div class="chart-container">
+                <canvas id="itemGroupChart"></canvas>
+            </div>
+        </div>
+
+        <div class="glass-card rounded-xl p-5">
+            <h3 class="text-lg font-semibold text-white mb-4 flex items-center gap-2">
+                <i class="fas fa-balance-scale text-cnc-accent"></i>
+                Gold vs Stock Value
+            </h3>
+            <div class="chart-container">
+                <canvas id="goldComparisonChart"></canvas>
+            </div>
+        </div>
+    </div>
+
